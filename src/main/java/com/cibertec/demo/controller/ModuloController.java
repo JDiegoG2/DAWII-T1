@@ -2,6 +2,8 @@ package com.cibertec.demo.controller;
 
 import com.cibertec.demo.entities.Modulo;
 import com.cibertec.demo.repositories.ModuloRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,26 +12,27 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/modulos")
+@RequestMapping("/api/modulos")
+@Tag(name = "Modulo", description = "API para la gestión de Módulos")
 public class ModuloController {
 
     @Autowired
     private ModuloRepository moduloRepository;
 
-    // Crear un nuevo Modulo
-    @PostMapping
+    @PostMapping("/create")
+    @Operation(summary = "Crear un nuevo Modulo")
     public Modulo createModulo(@RequestBody Modulo modulo) {
         return moduloRepository.save(modulo);
     }
 
-    // Obtener todos los Modulos
-    @GetMapping
+    @GetMapping("/all")
+    @Operation(summary = "Obtener todos los Modulos")
     public List<Modulo> getAllModulos() {
         return moduloRepository.findAll();
     }
 
-    // Obtener un Modulo por código
-    @GetMapping("/{codigo}")
+    @GetMapping("/get/{codigo}")
+    @Operation(summary = "Obtener un Modulo por código")
     public ResponseEntity<Modulo> getModuloById(@PathVariable Long codigo) {
         Optional<Modulo> modulo = moduloRepository.findById(codigo);
         if (modulo.isPresent()) {
@@ -39,8 +42,8 @@ public class ModuloController {
         }
     }
 
-    // Actualizar un Modulo
-    @PutMapping("/{codigo}")
+    @PutMapping("/update/{codigo}")
+    @Operation(summary = "Actualizar un Modulo")
     public ResponseEntity<Modulo> updateModulo(@PathVariable Long codigo, @RequestBody Modulo moduloDetails) {
         Optional<Modulo> optionalModulo = moduloRepository.findById(codigo);
         if (optionalModulo.isPresent()) {
@@ -53,8 +56,8 @@ public class ModuloController {
         }
     }
 
-    // Eliminar un Modulo
-    @DeleteMapping("/{codigo}")
+    @DeleteMapping("/delete/{codigo}")
+    @Operation(summary = "Eliminar un Modulo")
     public ResponseEntity<Void> deleteModulo(@PathVariable Long codigo) {
         Optional<Modulo> optionalModulo = moduloRepository.findById(codigo);
         if (optionalModulo.isPresent()) {

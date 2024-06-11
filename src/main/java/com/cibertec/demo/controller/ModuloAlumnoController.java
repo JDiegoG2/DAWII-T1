@@ -1,8 +1,9 @@
 package com.cibertec.demo.controller;
 
-
 import com.cibertec.demo.entities.ModuloAlumno;
 import com.cibertec.demo.repositories.ModuloAlumnoRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,32 +13,33 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/moduloalumnos")
+@Tag(name = "ModuloAlumno", description = "API para la gestión de ModuloAlumno")
 public class ModuloAlumnoController {
 
     @Autowired
     private ModuloAlumnoRepository moduloAlumnoRepository;
 
-    // Crear un nuevo ModuloAlumno
-    @PostMapping
+    @PostMapping("/create")
+    @Operation(summary = "Crear un nuevo ModuloAlumno")
     public ModuloAlumno createModuloAlumno(@RequestBody ModuloAlumno moduloAlumno) {
         return moduloAlumnoRepository.save(moduloAlumno);
     }
 
-    // Obtener todos los ModuloAlumnos
-    @GetMapping
+    @GetMapping("/all")
+    @Operation(summary = "Obtener todos los ModuloAlumnos")
     public List<ModuloAlumno> getAllModuloAlumnos() {
         return moduloAlumnoRepository.findAll();
     }
 
-    // Obtener un ModuloAlumno por ID
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener un ModuloAlumno por ID")
     public ResponseEntity<ModuloAlumno> getModuloAlumnoById(@PathVariable Long id) {
         Optional<ModuloAlumno> moduloAlumno = moduloAlumnoRepository.findById(id);
         return moduloAlumno.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Actualizar un ModuloAlumno
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
+    @Operation(summary = "Actualizar un ModuloAlumno")
     public ResponseEntity<ModuloAlumno> updateModuloAlumno(@PathVariable Long id, @RequestBody ModuloAlumno moduloAlumnoDetails) {
         return moduloAlumnoRepository.findById(id)
                 .map(moduloAlumno -> {
@@ -49,8 +51,8 @@ public class ModuloAlumnoController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Eliminar un ModuloAlumno
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Eliminar un ModuloAlumno")
     public ResponseEntity<Object> deleteModuloAlumno(@PathVariable Long id) {
         return moduloAlumnoRepository.findById(id)
                 .map(moduloAlumno -> {
